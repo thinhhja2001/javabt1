@@ -1,5 +1,5 @@
 import DAO.StudentDAO;
-import DTO.Student;
+import DTO.StudentDTO;
 
 import javax.swing.SortOrder;
 import java.util.*;
@@ -9,7 +9,8 @@ public class Main {
 
 
     public static void main(String[] args) {
-        List<Student> students;
+        List<StudentDTO> studentDTOS;
+        StudentDAO studentDAO = new StudentDAO();
         int choice;
         Scanner scanner = new Scanner(System.in);
         boolean isBreak = false;
@@ -24,10 +25,7 @@ public class Main {
             choice = scanner.nextInt();
             switch (choice) {
                 case 1:
-                    students = StudentDAO.getListStudent();
-                    for (Student student : students) {
-                        System.out.println(student.toString());
-                    }
+                    studentDAO.getAll();
                     break;
                 case 2:
                     System.out.println("Type in the order you want to get, 1 to get ASCENDING order, 0 to get DESCENDING order");
@@ -38,14 +36,11 @@ public class Main {
                         orderChoice = scanner.nextInt();
                     }
                     SortOrder sortOrder = orderChoice == 1 ? SortOrder.ASCENDING : SortOrder.DESCENDING;
-                    students = StudentDAO.getListStudentById(sortOrder);
-                    for (Student student : students) {
-                        System.out.print(student.toString());
-                    }
+                    studentDAO.getAllOrderById(sortOrder);
                     break;
                 case 3:
-                    Student newStudent = Student.inputNewStudentInformation();
-                    result = StudentDAO.addStudent(newStudent);
+                    StudentDTO newStudentDTO = StudentDTO.inputNewStudentInformation();
+                    result = StudentDAO.addStudent(newStudentDTO);
                     if (result == 1) {
                         System.out.println("Student added");
                     } else {
@@ -57,7 +52,7 @@ public class Main {
                     String oldId = scanner.next();
                     System.out.println("Type in the new student id");
                     String newId = scanner.next();
-                    result = StudentDAO.updateIdOfStudent(oldId, newId);
+                    result = studentDAO.updateId(oldId, newId);
                     if (result == 1) {
                         System.out.println("Student information updated");
                     } else {
@@ -67,7 +62,7 @@ public class Main {
                 case 5:
                     System.out.println("Type in the student id you want to delete");
                     String id = scanner.next();
-                    result = StudentDAO.deleteStudent(id);
+                    result = studentDAO.delete(id);
                     if (result == 1) {
                         System.out.println("Student deleted");
                     } else {
